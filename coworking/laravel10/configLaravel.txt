@@ -1,0 +1,179 @@
+php -S localhost:8000 -t public
+CREATION DE PROJET
+  composer create-project laravel/laravel=10 nomprojet
+
+COMMANDE POUR LA CONFIGURATION DATABASE
+  composer require illuminate/database
+  composer require doctrine/dbal 
+
+COMMANDE POUR INSTALLE OUTILS DE DEBUG
+  composer require barryvdh/laravel-debugbar --dev
+
+CONFIGURATION DE LA DATABASE DANS .env et ajouter :8000 a localhost
+  creation de la base dans le terminal
+  php artisan migrate
+
+CREATTION DE MODEL AVEC FICHIER DE MIGRATION DE TABLE
+  php artisan make:model NomModel -m 
+  pour configurer les colonne de la table aller dans le fichier de migration et ajouter la colonne
+  php artisan migrate
+
+CREER UNE TABLE 
+php artisan make:migration nomdelatable
+
+Cette commande annule la dernière migration (ou un groupe de migrations si elles ont été exécutées en même temps).
+php artisan migrate:rollback
+
+faire un roll back par pas 
+php artisan migrate:rollback --step=1
+
+migrer un fichier specifique
+php artisan migrate --path=/database/migrations/nom_du_fichier.php
+
+code laravel propre 
+https://chatgpt.com/share/ebf67c64-3306-425a-a914-031091cc9fab
+
+
+CREATION DE CONTROLLER
+  php artisan make:controller NomController ou dossier\fichier
+  si le controller aura crud pour eetre plus rapide 
+  php artisan make:controller NomController ou dossier\fichier -r
+
+CREATION CLASS pour la validation des formulaire formrequest
+   php artisan make:request Admin\PropertyFormRequest
+
+METTRE LES DOSSIER DE BOOTSTRAP DANS LE DOSSIER PUBLIC  du projet racine
+ 
+POUR UTILISER LA PAGINATION DE BOOTSTRAP 
+   app/providers/appserviceProvider et ajouter cette ligne Paginator::useBootstrapFive();
+   dans la methode boot()
+   avec import en haut use Illuminate\Pagination\Paginator;
+
+IMPORT CSV
+Pour lire un fichier CSV et insérer les données dans une table en utilisant Laravel, vous pouvez suivre ces étapes :
+composer require league/csv
+
+
+
+
+export PDF
+Pour générer des fichiers PDF dans Laravel, vous pouvez utiliser des bibliothèques comme dompdf/dompdf (via le package barryvdh/laravel-dompdf)
+https://chatgpt.com/share/d865bfe9-a9cc-4a82-ad32-8684a1fc4b01
+
+composer require barryvdh/laravel-dompdf
+Ajoutez le service provider dans le fichier config/app.php
+'providers' => [
+    // ...
+    Barryvdh\DomPDF\ServiceProvider::class,
+],
+'aliases' => [
+    // ...
+    'PDF' => Barryvdh\DomPDF\Facade::class,
+],
+
+
+php artisan vendor:publish --provider="Barryvdh\DomPDF\ServiceProvider"
+
+
+
+pour la gestion image sur property
+https://chatgpt.com/share/34920cf9-130f-4aeb-af31-84dfe9e7b4f0
+
+
+php artisan config:clear
+php artisan cache:clear
+php artisan route:clear
+composer dump-autoload
+
+AJOUTER ROLE USER 
+php artisan make:migration add_role_to_users_table --table=users
+
+
+
+Pour gérer un système de gestion d'utilisateur avec des rôles d'admin et de client sans utiliser Laravel Breeze, vous pouvez suivre ces étapes :
+Ajouter une colonne role à la table users :
+
+
+Créez deux contrôleurs d'authentification : un pour l'admin et un pour le client
+Ajoutez les méthodes de connexion dans ces contrôleurs 
+
+Définir les routes 
+Créer des middlewares pour vérifier les rôles :
+Ensuite, enregistrez ces middlewares dans app/Http/Kernel.php 
+https://chatgpt.com/share/deee3988-34ce-4d0e-a243-15eebf514230
+
+pour utiliser pagination bootstrap
+app/providers/appserviceProvider et ajouter cette ligne Paginator::useBootstrapFive();
+avec import en haut use Illuminate\Pagination\Paginator;
+
+
+
+gestion des tokens 
+ Installer le package jwt-auth
+composer require tymon/jwt-auth
+
+Publiez le fichier de configuration avec la commande suivante :
+php artisan vendor:publish --provider="Tymon\JWTAuth\Providers\LaravelServiceProvider"
+Générez une clé secrète pour signer vos tokens JWT :
+php artisan jwt:secret
+Cela va générer une clé et la stocker dans votre fichier .env sous JWT_SECRET.
+
+
+
+Configurer le middleware pour renvoyer une réponse JSON
+Dans le fichier App\Http\Middleware\Authenticate.php, modifiez la méthode redirectTo :
+
+protected function redirectTo($request)
+{
+    if (!$request->expectsJson()) {
+        return route('login');
+    }
+}
+
+Créez un middleware pour intercepter les erreurs de token invalide dans app/Http/Middleware/JWTMiddleware.php :
+php artisan make:middleware JWTMiddleware
+
+namespace App\Http\Middleware;
+
+use Closure;
+use Exception;
+use Tymon\JWTAuth\Facades\JWTAuth;
+use Tymon\JWTAuth\Exceptions\TokenExpiredException;
+use Tymon\JWTAuth\Exceptions\TokenInvalidException;
+use Tymon\JWTAuth\Exceptions\JWTException;
+
+class JWTMiddleware
+{
+    public function handle($request, Closure $next)
+    {
+        try {
+            JWTAuth::parseToken()->authenticate();
+        } catch (TokenExpiredException $e) {
+            return response()->json(['message' => 'Token expired'], 401);
+        } catch (TokenInvalidException $e) {
+            return response()->json(['message' => 'Token invalid'], 401);
+        } catch (JWTException $e) {
+            return response()->json(['message' => 'Token absent'], 401);
+        }
+
+        return $next($request);
+    }
+}
+
+Ensuite, enregistrez ce middleware dans le fichier app/Http/Kernel.php :
+
+protected $routeMiddleware = [
+    // ...
+    'jwt.auth' => \App\Http\Middleware\JWTMiddleware::class,
+];
+
+
+//creation de seeder 
+php artisan make:seeder UserSeeder
+execution 
+php artisan db:seed --class=UserSeeder
+
+
+php artisan migrate:fresh
+
+
