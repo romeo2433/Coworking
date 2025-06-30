@@ -6,7 +6,7 @@ Application web de gestion d’espaces de coworking permettant la réservation, 
 ## Technologies utilisées
 - PHP (Laravel)
 - JavaScript
-- MySQL
+- Postgres
 - HTML / CSS
 - framework : Bootstrap
 - Docker
