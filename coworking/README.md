@@ -4,7 +4,7 @@
 Application web de gestion d’espaces de coworking permettant la réservation, la gestion des paiements et le suivi des statistiques.
 
 ## Technologies utilisées
-- PHP
+- PHP (Laravel)
 - JavaScript
 - MySQL
 - HTML / CSS
