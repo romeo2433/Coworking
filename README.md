@@ -1,28 +1,50 @@
-## ✨ Fonctionnalités
+# Coworking
 
-- 🔐 **Authentification sécurisée**  
-  Connexion et gestion d'accès pour les administrateurs et les utilisateurs simples, avec séparation des rôles et droits.
+## Description
+Application web de gestion d’espaces de coworking permettant la réservation, la gestion des paiements et le suivi des statistiques.
 
-- 📅 **Réservation d’espaces de coworking**  
-  Les utilisateurs peuvent réserver des bureaux, salles ou autres espaces disponibles selon leurs besoins.
+## Technologies utilisées
+- PHP
+- JavaScript
+- MySQL
+- HTML / CSS
+- framework : Bootstrap
+- Docker
 
-- 💳 **Gestion complète des paiements**  
-  Paiements effectués par les utilisateurs, avec **validation ou rejet par l’administrateur**.
 
-- 📈 **Chiffres d'affaires : net, payé et à payer**  
-  Suivi détaillé des revenus : montant total encaissé, montant en attente, et chiffre d’affaires net.
+## Installation
+1. Clone le dépôt  
+```bash
+git clone https://github.com/romeo2433/Coworking.git
 
-- 📊 **Tableau de bord interactif**  
-  Vue d’ensemble des statistiques : nombre de réservations, revenus générés, utilisateurs actifs, etc.
+Si Linux 
+# Mettre à jour les paquets
+sudo apt update
+sudo apt install -y ca-certificates curl gnupg lsb-release
 
-- 🧾 **Importation de données (espaces, réservations)**  
-  Chargement rapide de données via fichiers (CSV, Excel…) pour faciliter la gestion des volumes importants.
 
-- 👥 **Gestion des utilisateurs et rôles**  
-  Interface d’administration pour créer, modifier ou supprimer des utilisateurs, avec gestion des droits.
+# Installer Docker Engine, CLI et containerd
+sudo apt install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
 
-- 🔎 **Recherche et filtres intelligents**  
-  Recherche rapide dans les réservations, espaces ou utilisateurs, avec filtres dynamiques.
+docker --version
 
-- 📬 **Formulaire de contact / feedback**  
-  Module de communication pour permettre aux utilisateurs de poser des questions ou faire des retours.
+
+sudo groupadd docker
+sudo usermod -aG docker $USER
+newgrp docker
+
+
+docker compose version
+        Tu dois voir une version, exemple :
+        Docker Compose version v2.20.0
+
+# Lancement du projet dans local 
+docker compose up -d --build
+sudo chmod -R 777 storage
+
+
+
+#  Acceder a la base de donnes 
+docker exec -it laravel_postgres psql -U postgres -d coworking
+
+Si tu es sur Windows je te souhaite de me contacter si il y a des problemes sur le fonctionnement 
